@@ -1,0 +1,14 @@
+* {
+	padding-top:10px;
+	margin: 0px;
+}
+
+body {
+	background-color:#FFFFFF;
+	color:#000000;
+	text-align:center;
+}
+
+td {
+	padding: 2px 5px;
+}

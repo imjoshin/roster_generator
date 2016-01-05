@@ -1,0 +1,147 @@
+<html>
+<head>
+	<title>MTU Housing Roster Formatter</title>
+	<link rel="shortcut icon" type="image/x-icon" href="ico1.png" />
+	<link rel="stylesheet" type="text/css" href="style.css">
+
+	<script type="text/javascript" src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+
+	<script>
+	$(document).ready(function(){
+
+		$.ajax({
+			type: "POST",
+			url:  "getFiles.php",
+			async: false,
+			success: function(output) {
+				$("#fileSelect").html(output);
+			}
+		});
+
+		$("#min, #max").keyup(function(){
+			$(this).val($(this).val().replace(/\D/g,''));
+		});
+
+		$('#format').keyup(function(){
+			var text = $("#format").val();
+			text = text.replace("#name#", "HUSKY, Blizzard T.");
+			text = text.replace("#first#", "Blizzard");
+			text = text.replace("#last#", "Husky");
+			text = text.replace("#gender#", "M");
+			text = text.replace("#age#", "25");
+			text = text.replace("#class#", "SR");
+			text = text.replace("#build#", "DH");
+			text = text.replace("#room#", "0100");
+			text = text.replace("#phone#", "(906)123-4567");
+			text = text.replace("#email#", "blizzard@mtu.edu");
+			text = text.replace("#id#", "blizzard");
+			$("#sample").html(text);
+		});
+
+		$("#gen").click(function(){
+			$.ajax({
+				type: "POST",
+				url:  "generate.php",
+				async: false,
+				data: { 
+					format: $("#format").val(),
+					url: $("#fileSelect option:selected").val(),
+					min: $("#min").val(),
+					max: $("#max").val()
+				},
+				success: function(output) {
+					$("#link").html("<a href=" + output + ">Output</a>");
+				}
+			});
+		});
+	});
+	</script>
+
+</head>
+
+<body>
+	<table style="width:300px; margin:0 auto;">
+		<tbody>
+			<tr>
+				<td style="text-align:right;">#name#</td><td>Name as on Roster</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">#first#</td><td>First name</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">#last#</td><td>Last name</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">#gender#</td><td>Gender</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">#age#</td><td>Age</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">#class#</td><td>Class</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">#build#</td><td>Building</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">#room#</td><td>Room Number</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">#phone#</td><td>Phone Number</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">#email#</td><td>E-mail Address</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;">#id#</td><td>Student ID</td>
+			</tr>
+		</tbody>
+	</table>
+	<br>
+	<br>
+
+
+	<table style="width:800px; margin: 0 auto;">
+		<tbody>
+			<tr>
+				<td width="280">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Name</b></td>
+				<td width="20"><b>G</b></td>
+				<td width="20"><b>AG</b></td>
+				<td width="30"><b>CL</b></td>
+				<td width="30"><b>BL</b></td>
+				<td width="50"><b>Room</b></td>
+				<td width="70">&nbsp;&nbsp;<b>Phone</b></td>
+				<td width="70">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Email </b></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td valign="top">HUSKY, Blizzard T.</td>
+				<td>M</td>
+				<td>25</td>
+				<td>SR</td>
+				<td>DH</td>
+				<td valign="top"><b>0100</b></td>
+				<td valign="top">(906)123-4567</td>
+				<td valign="top"><a href="mailto:blizzard@mtu.edu">blizzard@mtu.edu</a></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<br>
+	<br>
+
+	Sample output: <div id="sample" style="min-height:50px"></div>
+
+	<div id="fileSelect"></div><br>
+	<input type=text id="format" placeholder="Format"></input><br><br>
+	Room numbers: 
+	<input type=text id="min" placeholder="Min" size="3" maxlength="3"></input>
+	<input type=text id="max" placeholder="Max" size="3" maxlength="3"></input><br>
+	<button type=button id="gen">Generate!</button>
+	<div id="link"></div>
+</body>
+</html>
